@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register Student | AttendX</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">🎓</span>
+
+            <span>
+                AttendX
+                <small>Student Registration</small>
+            </span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/student">Attendance</a>
+            <a href="/teacher/login">Teacher Panel</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+<div class="container">
+
+    <div class="page-head">
+
+        <div>
+            <h2>Register Student</h2>
+
+            <p>
+                Register your device before marking attendance.
+            </p>
+        </div>
+
+        <a
+            class="btn btn-secondary"
+            href="/"
+        >
+            ← Home
+        </a>
+
+    </div>
+
+
+    <div class="dashboard">
+
+        <section class="card">
+
+            <!-- Hotspot status -->
+
+            <div
+                id="networkStatus"
+                class="alert alert-warning"
+            >
+                📡 Checking teacher hotspot connection...
+            </div>
+
+
+            {% if message %}
+
+            <div
+                class="alert
+                {{ 'alert-success'
+                   if 'success' in message|lower
+                   else 'alert-error' }}"
+            >
+                {{ message }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- Registration form -->
+
+            <form
+                method="POST"
+                class="form-stack"
+                id="registrationForm"
+            >
+
+                <div class="field">
+
+                    <label for="name">
+                        Student name
+                    </label>
+
+                    <input
+                        id="name"
+                        type="text"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="mac">
+                        MAC address
+                    </label>
+
+                    <input
+                        id="mac"
+                        type="text"
+                        name="mac"
+                        placeholder="Example: AA:BB:CC:DD:EE:FF"
+                        required
+                    >
+
+                    <div class="hint">
+                        Use the device MAC address registered by your teacher.
+                    </div>
+
+                </div>
+
+
+                <!-- Hidden verification token -->
+
+                <input
+                    type="hidden"
+                    name="verification_token"
+                    id="verificationToken"
+                >
+
+
+                <button
+                    class="btn btn-primary btn-full"
+                    type="submit"
+                    id="registerButton"
+                    disabled
+                >
+                    Checking hotspot...
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <aside class="card">
+
+            <h3>How it works</h3>
+
+            <div class="mini-list">
+
+                <div class="mini-item">
+                    01 · Connect to the teacher's hotspot
+                </div>
+
+                <div class="mini-item">
+                    02 · AttendX verifies your connection
+                </div>
+
+                <div class="mini-item">
+                    03 · Enter your registered details
+                </div>
+
+                <div class="mini-item">
+                    04 · Complete registration
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-inner">
+
+        <span>AttendX</span>
+
+        <a href="/teacher/login">
+            Teacher Panel →
+        </a>
+
+    </div>
+
+</footer>
+
+
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+            © 2026 AttendX · Developed by
+            <strong>Divyanshu Pal</strong>
+        </div>
+
+        <a href="mailto:divyanshuofficials27@gmail.com">
+            divyanshuofficials27@gmail.com
+        </a>
+
+        <div class="footer-links">
+
+            <a
+                href="https://github.com/Divyanshu-official"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                GitHub
+            </a>
+
+            <span>·</span>
+
+            <a
+                href="https://www.linkedin.com/in/divyanshu-pal-953695314/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                LinkedIn
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+    /*
+     * AttendX Local Hotspot Verification
+     *
+     * The browser contacts the local AttendX verifier.
+     * If the student is connected to the teacher hotspot,
+     * the verifier returns a temporary signed token.
+     */
+
+    const LOCAL_VERIFIER =
+        "http://10.24.206.20:5000/local-verification";
+
+
+    const networkStatus =
+        document.getElementById("networkStatus");
+
+    const registerButton =
+        document.getElementById("registerButton");
+
+    const verificationToken =
+        document.getElementById("verificationToken");
+
+
+    async function verifyTeacherHotspot() {
+
+        networkStatus.className =
+            "alert alert-warning";
+
+        networkStatus.textContent =
+            "🔐 Verifying teacher hotspot connection...";
+
+        registerButton.disabled = true;
+
+        registerButton.textContent =
+            "Checking hotspot...";
+
+
+        try {
+
+            /*
+             * Ask the browser for Local Network permission.
+             */
+
+            if (
+                navigator.permissions
+                && navigator.permissions.query
+            ) {
+
+                try {
+
+                    const permission =
+                        await navigator.permissions.query({
+                            name: "local-network"
+                        });
+
+                    console.log(
+                        "Local Network Permission:",
+                        permission.state
+                    );
+
+                } catch (permissionError) {
+
+                    console.log(
+                        "Local Network permission API unavailable."
+                    );
+
+                }
+
+            }
+
+
+            /*
+             * Contact the local AttendX verifier.
+             */
+
+            const response =
+                await fetch(
+                    LOCAL_VERIFIER,
+                    {
+                        method: "GET",
+                        mode: "cors",
+                        targetAddressSpace: "local"
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            /*
+             * Hotspot verification failed.
+             */
+
+            if (
+                !response.ok
+                || !data.verified
+                || !data.token
+            ) {
+
+                verificationToken.value = "";
+
+                networkStatus.className =
+                    "alert alert-error";
+
+                networkStatus.textContent =
+                    "❌ Please connect to the teacher's hotspot.";
+
+                registerButton.disabled = true;
+
+                registerButton.textContent =
+                    "Connect to Teacher Hotspot";
+
+                return;
+
+            }
+
+
+            /*
+             * Hotspot verification succeeded.
+             */
+
+            verificationToken.value =
+                data.token;
+
+
+            networkStatus.className =
+                "alert alert-success";
+
+            networkStatus.textContent =
+                "✅ Teacher hotspot verified. You can register now.";
+
+
+            registerButton.disabled =
+                false;
+
+            registerButton.textContent =
+                "Create Registration";
+
+
+            /*
+             * Automatically disable the token
+             * when it expires.
+             */
+
+            if (data.expires_at) {
+
+                const remainingTime =
+                    Math.max(
+                        0,
+                        (data.expires_at * 1000)
+                        - Date.now()
+                    );
+
+
+                setTimeout(
+                    function () {
+
+                        verificationToken.value = "";
+
+                        registerButton.disabled = true;
+
+                        registerButton.textContent =
+                            "Verification Expired";
+
+                        networkStatus.className =
+                            "alert alert-warning";
+
+                        networkStatus.textContent =
+                            "⚠️ Verification expired. Checking again...";
+
+
+                        verifyTeacherHotspot();
+
+                    },
+                    remainingTime
+                );
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "AttendX local verification error:",
+                error
+            );
+
+
+            verificationToken.value = "";
+
+            networkStatus.className =
+                "alert alert-error";
+
+            networkStatus.textContent =
+                "❌ Please connect to the teacher's hotspot.";
+
+            registerButton.disabled = true;
+
+            registerButton.textContent =
+                "Connect to Teacher Hotspot";
+
+        }
+
+    }
+
+
+    /*
+     * Start verification automatically
+     * when the registration page opens.
+     */
+
+    verifyTeacherHotspot();
+
+
+    /*
+     * Prevent submission without a verification token.
+     */
+
+    document
+        .getElementById("registrationForm")
+        .addEventListener(
+            "submit",
+            function (event) {
+
+                if (!verificationToken.value) {
+
+                    event.preventDefault();
+
+                    networkStatus.className =
+                        "alert alert-error";
+
+                    networkStatus.textContent =
+                        "❌ Please connect to the teacher's hotspot first.";
+
+                }
+
+            }
+        );
+
+</script>
+
+</body>
+</html>

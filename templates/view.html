@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Attendance Records | AttendX</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><header class="topbar"><div class="container nav"><a class="brand" href="/"><span class="brand-mark">🎓</span><span>AttendX<small>Attendance Records</small></span></a><nav class="nav-links"><a href="/teacher">Teacher Panel</a><a href="/registered_students">Students</a></nav></div></header>
+<main><div class="container"><div class="page-head"><div><h2>Attendance Records</h2><p>Recorded attendance submitted through the local-network workflow.</p></div><a class="btn btn-secondary" href="/teacher">← Teacher Panel</a></div><div class="table-card">{% if records %}<div class="table-toolbar"><div><strong>{{ records|length }} record{{ '' if records|length == 1 else 's' }}</strong><div class="muted" style="font-size:13px">Attendance history</div></div></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>MAC Address</th><th>IP Address</th><th>Timestamp</th></tr></thead><tbody>{% for record in records %}<tr><td><strong>{{ record[0] }}</strong></td><td><code>{{ record[1] }}</code></td><td><code>{{ record[2] }}</code></td><td>{{ record[3] }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty"><div style="font-size:40px">📊</div><h3>No attendance records yet</h3><p>Records will appear here after a student successfully marks attendance.</p><a class="btn btn-primary" href="/student">Go to Attendance</a></div>{% endif %}</div></div></main><footer class="footer"><div class="container footer-inner"><span>AttendX</span><a href="/">Home →</a></div></footer>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">© 2026 AttendX · Developed by <strong>Divyanshu Pal</strong></div>
+    <a href="mailto:divyanshuofficials27@gmail.com">divyanshuofficials27@gmail.com</a>
+    <div class="footer-links">
+      <a href="https://github.com/Divyanshu-official" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span>·</span>
+      <a href="https://www.linkedin.com/in/divyanshu-pal-953695314/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+</body></html>

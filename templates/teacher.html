@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Panel | AttendX</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">🎓</span>
+
+            <span>
+                AttendX
+                <small>Teacher Console</small>
+            </span>
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="/student">Student</a>
+
+            <a href="/view">Records</a>
+
+            <a href="/registered_students">Students</a>
+
+            <form
+                action="/teacher/logout"
+                method="post"
+                style="display:inline"
+            >
+                <button
+                    class="btn btn-secondary"
+                    type="submit"
+                >
+                    Log out
+                </button>
+            </form>
+
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <div class="container">
+
+        <div class="page-head">
+
+            <div>
+                <h2>Teacher Dashboard</h2>
+
+                <p>
+                    Control registration and attendance for the current
+                    classroom session.
+                </p>
+            </div>
+
+            <a
+                class="btn btn-secondary"
+                href="/"
+            >
+                ← Home
+            </a>
+
+        </div>
+
+
+        <div class="dashboard">
+
+            <!-- MAIN CONTROL CARD -->
+
+            <section class="card">
+
+                <!-- STATUS -->
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            Attendance
+                        </div>
+
+                        <div class="stat-value">
+
+                            <span
+                                class="status {{ 'status-on' if status == 'ON' else 'status-off' }}"
+                            >
+                                <span class="status-dot"></span>
+
+                                {{ status }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            Registration
+                        </div>
+
+                        <div class="stat-value">
+
+                            <span
+                                class="status {{ 'status-on' if registration_status else 'status-off' }}"
+                            >
+                                <span class="status-dot"></span>
+
+                                {{ 'ON' if registration_status else 'OFF' }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ATTENDANCE CONTROL -->
+
+                <div class="control">
+
+                    <div>
+
+                        <div class="control-title">
+                            Attendance session
+                        </div>
+
+                        <div class="control-desc">
+                            Allow registered students to submit attendance.
+                        </div>
+
+                    </div>
+
+                    <form
+                        action="/toggle_attendance"
+                        method="post"
+                    >
+
+                        <button
+                            class="btn {{ 'btn-danger' if status == 'ON' else 'btn-primary' }}"
+                            type="submit"
+                        >
+                            {{ 'Turn Off' if status == 'ON' else 'Turn On' }}
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- REGISTRATION CONTROL -->
+
+                <div class="control">
+
+                    <div>
+
+                        <div class="control-title">
+                            Student registration
+                        </div>
+
+                        <div class="control-desc">
+                            Allow students to register on the authorized network.
+                        </div>
+
+                    </div>
+
+                    <form
+                        action="/toggle_registration"
+                        method="post"
+                    >
+
+                        <button
+                            class="btn {{ 'btn-danger' if registration_status else 'btn-success' }}"
+                            type="submit"
+                        >
+                            {{ 'Disable' if registration_status else 'Enable' }}
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- STUDENT ACCESS -->
+
+                <div class="control">
+
+                    <div style="width:100%;">
+
+                        <div class="control-title">
+                            Student Access
+                        </div>
+
+                        <div class="control-desc">
+                            Share this link with students to open AttendX
+                            on the classroom network.
+                        </div>
+
+
+                        <div style="margin-top:12px;">
+
+                            <input
+                                id="studentAccessLink"
+                                type="text"
+                                readonly
+                                aria-label="Student AttendX access link"
+                                style="
+                                    width:100%;
+                                    padding:12px;
+                                    border-radius:8px;
+                                    border:1px solid rgba(255,255,255,0.12);
+                                    background:#0b1929;
+                                    color:#dcebf2;
+                                    font-size:14px;
+                                    outline:none;
+                                "
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="copyLinkButton"
+                        class="btn btn-primary"
+                        type="button"
+                        onclick="copyStudentLink(this)"
+                    >
+                        🔗 Copy Link
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <aside class="card">
+
+                <h3>
+                    Quick Actions
+                </h3>
+
+                <p class="muted">
+                    Manage classroom records from one place.
+                </p>
+
+
+                <div
+                    class="actions"
+                    style="display:grid"
+                >
+
+                    <a
+                        class="btn btn-secondary btn-full"
+                        href="/view"
+                    >
+                        📊 Attendance Records
+                    </a>
+
+
+                    <a
+                        class="btn btn-secondary btn-full"
+                        href="/registered_students"
+                    >
+                        👥 Registered Students
+                    </a>
+
+
+                    <a
+                        class="btn btn-primary btn-full"
+                        href="/student"
+                    >
+                        🧑‍🎓 Student Attendance
+                    </a>
+
+                </div>
+
+
+                <div class="notice">
+
+                    <strong>Reminder:</strong>
+
+                    The attendance workflow depends on the teacher's
+                    authorized local Wi-Fi/hotspot.
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- NORMAL FOOTER -->
+
+<footer class="footer">
+
+    <div class="container footer-inner">
+
+        <span>
+            AttendX Teacher Console
+        </span>
+
+        <span>
+            Local network attendance
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- OWNERSHIP FOOTER -->
+
+<footer class="site-footer">
+
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+
+            © 2026 AttendX · Developed by
+            <strong>Divyanshu Pal</strong>
+
+        </div>
+
+
+        <a
+            href="mailto:divyanshuofficials27@gmail.com"
+        >
+            divyanshuofficials27@gmail.com
+        </a>
+
+
+        <div class="footer-links">
+
+            <a
+                href="https://github.com/Divyanshu-official"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                GitHub
+            </a>
+
+            <span>·</span>
+
+            <a
+                href="https://www.linkedin.com/in/divyanshu-pal-953695314/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                LinkedIn
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+    /*
+     * PUBLIC ATTENDX WEBSITE
+     *
+     * Development URL:
+     * http://10.24.206.20:5500
+     *
+     * Later this will be replaced with the
+     * deployed HTTPS AttendX website.
+     */
+
+    const publicSiteUrl =
+    "https://attendx-public-dev.vercel.app";
+
+
+    /*
+     * Get the current teacher server address
+     *
+     * Example:
+     * 10.24.206.20:5000
+     */
+
+    const teacherServer =
+        window.location.host;
+
+
+    /*
+     * Create the student access URL
+     */
+
+    const studentAccessUrl =
+        publicSiteUrl +
+        "/?server=" +
+        encodeURIComponent(teacherServer);
+
+
+    /*
+     * Display the generated link
+     */
+
+    const studentAccessLink =
+        document.getElementById("studentAccessLink");
+
+    studentAccessLink.value =
+        studentAccessUrl;
+
+
+    /*
+     * Copy student access link
+     */
+
+    async function copyStudentLink(button) {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                studentAccessUrl
+            );
+
+
+            const originalText =
+                button.innerHTML;
+
+
+            button.innerHTML =
+                "✅ Copied";
+
+
+            setTimeout(function () {
+
+                button.innerHTML =
+                    originalText;
+
+            }, 1500);
+
+
+        } catch (error) {
+
+            /*
+             * Fallback for browsers where
+             * clipboard permission is unavailable.
+             */
+
+            studentAccessLink.select();
+
+            studentAccessLink.setSelectionRange(
+                0,
+                99999
+            );
+
+
+            try {
+
+                document.execCommand("copy");
+
+                button.innerHTML =
+                    "✅ Copied";
+
+                setTimeout(function () {
+
+                    button.innerHTML =
+                        "🔗 Copy Link";
+
+                }, 1500);
+
+            } catch (copyError) {
+
+                alert(
+                    "Could not copy the link. Please copy it manually."
+                );
+
+            }
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+</html>

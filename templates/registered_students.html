@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Registered Students | AttendX</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><header class="topbar"><div class="container nav"><a class="brand" href="/"><span class="brand-mark">🎓</span><span>AttendX<small>Registered Students</small></span></a><nav class="nav-links"><a href="/teacher">Teacher Panel</a><a href="/view">Records</a></nav></div></header>
+<main><div class="container"><div class="page-head"><div><h2>Registered Students</h2><p>Students currently stored in the local attendance system.</p></div><a class="btn btn-secondary" href="/teacher">← Teacher Panel</a></div><div class="table-card">{% if students %}<div class="table-toolbar"><div><strong>{{ students|length }} student{{ '' if students|length == 1 else 's' }}</strong><div class="muted" style="font-size:13px">Registration directory</div></div></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Student Name</th><th>MAC Address</th></tr></thead><tbody>{% for student in students %}<tr><td>{{ loop.index }}</td><td><strong>{{ student[0] }}</strong></td><td><code>{{ student[1] }}</code></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty"><div style="font-size:40px">👥</div><h3>No students registered yet</h3><p>Enable registration from the Teacher Panel to add students.</p><a class="btn btn-primary" href="/teacher">Open Teacher Panel</a></div>{% endif %}</div></div></main><footer class="footer"><div class="container footer-inner"><span>AttendX</span><a href="/">Home →</a></div></footer>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">© 2026 AttendX · Developed by <strong>Divyanshu Pal</strong></div>
+    <a href="mailto:divyanshuofficials27@gmail.com">divyanshuofficials27@gmail.com</a>
+    <div class="footer-links">
+      <a href="https://github.com/Divyanshu-official" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span>·</span>
+      <a href="https://www.linkedin.com/in/divyanshu-pal-953695314/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+</body></html>

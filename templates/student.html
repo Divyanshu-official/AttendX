@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Mark Attendance | AttendX</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><header class="topbar"><div class="container nav"><a class="brand" href="/"><span class="brand-mark">🎓</span><span>AttendX<small>Student Attendance</small></span></a><nav class="nav-links"><a href="/register">Register</a><a href="/teacher/login">Teacher Panel</a></nav></div></header>
+<main><div class="container"><div class="page-head"><div><h2>Mark Attendance</h2><p>Submit your attendance from the authorized classroom network.</p></div><a class="btn btn-secondary" href="/">← Home</a></div><div class="dashboard"><section class="card"><div class="alert alert-warning">📡 You must be connected to the teacher's authorized hotspot/Wi-Fi.</div>{% if message %}<div class="alert {{ 'alert-success' if 'successfully' in message|lower else ('alert-warning' if 'currently off' in message|lower else 'alert-error') }}">{{ message }}</div>{% endif %}<form method="POST" class="form-stack"><div class="field"><label for="name">Student name</label><input id="name" type="text" name="name" placeholder="Enter your registered name" required></div><div class="field"><label for="mac">MAC address</label><input id="mac" type="text" name="mac" placeholder="Example: AA:BB:CC:DD:EE:FF" required></div><button class="btn btn-primary btn-full" type="submit">✓ Mark My Attendance</button></form></section><aside class="card"><h3>Before you submit</h3><div class="mini-list"><div class="mini-item">✓ Use the same name used during registration</div><div class="mini-item">✓ Use the registered MAC address</div><div class="mini-item">✓ Stay connected to the teacher's hotspot</div><div class="mini-item">✓ Attendance must be turned ON by the teacher</div></div></aside></div></div></main><footer class="footer"><div class="container footer-inner"><span>AttendX</span><a href="/register">Need registration? →</a></div></footer>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">© 2026 AttendX · Developed by <strong>Divyanshu Pal</strong></div>
+    <a href="mailto:divyanshuofficials27@gmail.com">divyanshuofficials27@gmail.com</a>
+    <div class="footer-links">
+      <a href="https://github.com/Divyanshu-official" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span>·</span>
+      <a href="https://www.linkedin.com/in/divyanshu-pal-953695314/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+</body></html>

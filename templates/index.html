@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AttendX | Wi-Fi Attendance</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<header class="topbar"><div class="container nav"><a class="brand" href="/"><span class="brand-mark">🎓</span><span>AttendX<small>Wi-Fi Attendance System</small></span></a><nav class="nav-links"><a href="/register">Register</a><a href="/student">Mark Attendance</a><a href="/teacher/login">Teacher Panel</a></nav></div></header>
+<main><div class="container">
+<section class="hero"><div class="hero-copy"><span class="eyebrow"><span class="dot"></span> Local Network Attendance</span><h1>Smart attendance for connected classrooms.</h1><p class="lead">Verify students connected to the teacher's authorized Wi-Fi hotspot and record attendance through a simple classroom workflow.</p><div class="actions"><a class="btn btn-primary" href="/student">🧑‍🎓 Mark Attendance</a><a class="btn btn-secondary" href="/teacher/login">👨‍🏫 Open Teacher Panel</a></div><div class="notice"><strong>Local network required:</strong> Students must be connected to the teacher's authorized hotspot/Wi-Fi for network verification.</div></div>
+<div class="hero-card"><div><div class="network-badge"><span class="network-dot"></span> Classroom network workflow</div><p>One teacher-hosted local server can coordinate registration and attendance for connected students.</p></div><div class="mini-list"><div class="mini-item">1. Teacher starts the session</div><div class="mini-item">2. Students connect to the same hotspot</div><div class="mini-item">3. System verifies the local network</div><div class="mini-item">4. Attendance is recorded</div></div></div></section>
+<section class="section grid-3"><div class="card feature"><div class="icon">📝</div><h3>Student Registration</h3><p class="muted">Register a student before attendance is enabled.</p><a class="btn btn-secondary" href="/register">Open Registration</a></div><div class="card feature"><div class="icon">📡</div><h3>Network Verification</h3><p class="muted">Attendance uses the teacher's authorized local network as part of verification.</p></div><div class="card feature"><div class="icon">📊</div><h3>Attendance Records</h3><p class="muted">Teachers can review recorded attendance and registered students.</p><a class="btn btn-secondary" href="/view">View Records</a></div></section>
+</div></main><footer class="footer"><div class="container footer-inner"><span>AttendX · Wi-Fi Attendance System</span><span>Built with Python & Flask</span></div></footer>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">© 2026 AttendX · Developed by <strong>Divyanshu Pal</strong></div>
+    <a href="mailto:divyanshuofficials27@gmail.com">divyanshuofficials27@gmail.com</a>
+    <div class="footer-links">
+      <a href="https://github.com/Divyanshu-official" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span>·</span>
+      <a href="https://www.linkedin.com/in/divyanshu-pal-953695314/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+</body></html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AttendX | Smart Wi-Fi Attendance</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #07111f;
+            color: #e8f1f8;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: auto;
+        }
+
+        /* NAVBAR */
+
+        .topbar {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(7,17,31,0.95);
+        }
+
+        .nav {
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .brand-mark {
+            font-size: 28px;
+        }
+
+        .brand small {
+            display: block;
+            color: #7f9caf;
+            font-size: 11px;
+            margin-top: 3px;
+            font-weight: 400;
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 80px 0 55px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 45px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #53d6d0;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #35d4c8;
+            box-shadow: 0 0 12px #35d4c8;
+        }
+
+        h1 {
+            font-size: clamp(38px, 5vw, 62px);
+            line-height: 1.05;
+            margin-bottom: 22px;
+            letter-spacing: -2px;
+        }
+
+        .lead {
+            color: #9bb0bf;
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        /* STATUS */
+
+        .status-box {
+            margin-top: 30px;
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(83,214,208,0.2);
+            background: rgba(17,35,53,0.8);
+        }
+
+        .status-title {
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .status-text {
+            color: #9bb0bf;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .status-success {
+            color: #4ee1a1;
+        }
+
+        .status-error {
+            color: #ff7676;
+        }
+
+        .status-loading {
+            color: #ffd166;
+        }
+
+        /* BUTTONS */
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 0 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #26c6c0;
+            color: #031318;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #45ddd7;
+        }
+
+        .btn-secondary {
+            background: #12263a;
+            color: #dcebf2;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-secondary:hover {
+            background: #19334b;
+        }
+
+        .btn:disabled,
+        .disabled {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        /* CARD */
+
+        .hero-card {
+            background: linear-gradient(145deg, #10243a, #0b1929);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.25);
+        }
+
+        .network-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            background: rgba(38,198,192,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin-bottom: 22px;
+        }
+
+        .hero-card h2 {
+            font-size: 25px;
+            margin-bottom: 12px;
+        }
+
+        .hero-card p {
+            color: #91a8b8;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .steps {
+            display: grid;
+            gap: 12px;
+        }
+
+        .step {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 13px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.035);
+            color: #c8d7df;
+            font-size: 14px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #18384d;
+            color: #50d9d3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* FEATURES */
+
+        .features {
+            padding: 25px 0 70px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature {
+            background: #0d1d2d;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .feature-icon {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            margin-bottom: 9px;
+        }
+
+        .feature p {
+            color: #8fa5b5;
+            line-height: 1.55;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 25px 0;
+            color: #7f95a5;
+            font-size: 13px;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-links a {
+            color: #54d7d1;
+            text-decoration: none;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 55px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                letter-spacing: -1px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">🎓</span>
+
+            <span>
+                AttendX
+                <small>Smart Wi-Fi Attendance</small>
+            </span>
+        </a>
+
+    </div>
+</header>
+
+
+<main>
+
+    <div class="container">
+
+        <section class="hero">
+
+            <div>
+
+                <span class="eyebrow">
+                    <span class="dot"></span>
+                    Secure Classroom Attendance
+                </span>
+
+                <h1>
+                    Smart attendance for connected classrooms.
+                </h1>
+
+                <p class="lead">
+                    AttendX helps teachers manage student registration
+                    and attendance using an authorized classroom Wi-Fi
+                    hotspot.
+                </p>
+
+
+                <!-- NETWORK STATUS -->
+
+                <div class="status-box">
+
+                    <div class="status-title" id="statusTitle">
+                        Checking classroom network...
+                    </div>
+
+                    <div class="status-text" id="statusText">
+                        Please connect your device to the teacher's
+                        authorized hotspot.
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="actions">
+
+                    <a
+                        id="registerBtn"
+                        class="btn btn-primary disabled"
+                        href="http://10.24.206.20:5000/register"
+                    >
+                        🧑‍🎓 Register
+                    </a>
+
+                    <a
+                        id="attendanceBtn"
+                        class="btn btn-secondary disabled"
+                        href="http://10.24.206.20:5000/student"
+                    >
+                        📋 Mark Attendance
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT CARD -->
+
+            <div class="hero-card">
+
+                <div class="network-icon">
+                    📡
+                </div>
+
+                <h2>
+                    How AttendX works
+                </h2>
+
+                <p>
+                    Students don't need to enter a session code.
+                    AttendX verifies the authorized classroom
+                    network automatically.
+                </p>
+
+                <div class="steps">
+
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        Teacher starts AttendX
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        Students connect to the hotspot
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        AttendX verifies the network
+                    </div>
+
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        Student registers or marks attendance
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FEATURES -->
+
+        <section class="features">
+
+            <div class="feature">
+
+                <div class="feature-icon">🔐</div>
+
+                <h3>
+                    Network Verification
+                </h3>
+
+                <p>
+                    AttendX checks whether the device is connected
+                    to the authorized classroom network before
+                    allowing protected actions.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">📝</div>
+
+                <h3>
+                    Student Registration
+                </h3>
+
+                <p>
+                    Students can register their details before
+                    attendance is enabled by the teacher.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">📊</div>
+
+                <h3>
+                    Attendance Records
+                </h3>
+
+                <p>
+                    Teachers can manage attendance and review
+                    registered students through the teacher panel.
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <div>
+            © 2026 AttendX · Developed by
+            <strong>Divyanshu Pal</strong>
+        </div>
+
+        <div class="footer-links">
+
+            <a
+                href="https://github.com/Divyanshu-official"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                GitHub
+            </a>
+
+            <a
+                href="https://www.linkedin.com/in/divyanshu-pal-953695314/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                LinkedIn
+            </a>
+
+            <a href="mailto:divyanshuofficials27@gmail.com">
+                Email
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+    /*
+        Development local verifier.
+
+        The teacher laptop currently runs AttendX at:
+
+        http://10.24.206.20:5000
+    */
+
+    const params = new URLSearchParams(window.location.search);
+
+const serverAddress =
+    params.get("server") || "10.24.206.20:5000";
+
+const LOCAL_VERIFIER =
+    `http://${serverAddress}/local-verification`;
+
+    const statusTitle =
+        document.getElementById("statusTitle");
+
+    const statusText =
+        document.getElementById("statusText");
+
+    const registerBtn =
+        document.getElementById("registerBtn");
+
+    const attendanceBtn =
+        document.getElementById("attendanceBtn");
+
+
+    async function verifyClassroomNetwork() {
+
+        statusTitle.textContent =
+            "Checking classroom network...";
+
+        statusTitle.className =
+            "status-title status-loading";
+
+        statusText.textContent =
+            "Please wait while AttendX verifies your connection.";
+
+        registerBtn.classList.add("disabled");
+        attendanceBtn.classList.add("disabled");
+
+
+        try {
+
+            const response = await fetch(
+                LOCAL_VERIFIER,
+                {
+                    method: "GET",
+                    mode: "cors",
+                    targetAddressSpace: "local"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Local verification failed"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.verified) {
+
+                throw new Error(
+                    "Device is not connected to the authorized hotspot."
+                );
+
+            }
+
+
+            statusTitle.textContent =
+                "✓ Classroom network verified";
+
+            statusTitle.className =
+                "status-title status-success";
+
+
+            statusText.textContent =
+                "Your device is connected to the authorized AttendX network.";
+
+
+            registerBtn.classList.remove("disabled");
+
+            attendanceBtn.classList.remove("disabled");
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            statusTitle.textContent =
+                "✕ Classroom network not verified";
+
+            statusTitle.className =
+                "status-title status-error";
+
+
+            statusText.textContent =
+                "Connect to the teacher's authorized hotspot and try again.";
+
+
+            registerBtn.classList.add("disabled");
+
+            attendanceBtn.classList.add("disabled");
+
+        }
+
+    }
+
+
+    /*
+        Check automatically when the public page opens.
+    */
+
+    verifyClassroomNetwork();
+
+</script>
+
+</body>
+</html>

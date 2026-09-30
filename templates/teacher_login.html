@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Teacher Login | AttendX</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<header class="topbar"><div class="container nav"><a class="brand" href="/"><span class="brand-mark">🎓</span><span>AttendX<small>Teacher Access</small></span></a><nav class="nav-links"><a href="/register">Register</a><a href="/student">Attendance</a></nav></div></header>
+<main><div class="container"><div class="page-head"><div><h2>Teacher Login</h2><p>Sign in to manage the classroom attendance session.</p></div><a class="btn btn-secondary" href="/">← Home</a></div>
+<div class="dashboard"><section class="card">
+<div class="alert alert-warning">🔒 Teacher controls are restricted to authorized users.</div>
+{% if message %}<div class="alert alert-error">{{ message }}</div>{% endif %}
+<form method="POST" class="form-stack">
+<input type="hidden" name="next" value="{{ next_url }}">
+<div class="field"><label for="username">Username</label><input id="username" type="text" name="username" placeholder="Enter teacher username" autocomplete="username" required></div>
+<div class="field"><label for="password">Password</label><input id="password" type="password" name="password" placeholder="Enter teacher password" autocomplete="current-password" required></div>
+<button class="btn btn-primary btn-full" type="submit">🔐 Sign In to Teacher Panel</button>
+</form></section>
+<aside class="card"><h3>Teacher access</h3><div class="mini-list"><div class="mini-item">01 · Control attendance sessions</div><div class="mini-item">02 · Enable or disable registration</div><div class="mini-item">03 · View attendance records</div><div class="mini-item">04 · View registered students</div></div></aside></div></div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand">© 2026 AttendX · Developed by <strong>Divyanshu Pal</strong></div><a href="mailto:divyanshuofficials27@gmail.com">divyanshuofficials27@gmail.com</a><div class="footer-links"><a href="https://github.com/Divyanshu-official" target="_blank" rel="noopener noreferrer">GitHub</a><span>·</span><a href="https://www.linkedin.com/in/divyanshu-pal-953695314/" target="_blank" rel="noopener noreferrer">LinkedIn</a></div></div></footer>
+</body></html>
